@@ -14,8 +14,6 @@ protected:
     string enroll_no;
 
 public:
-    // virtual void add_data() = 0;
-    // virtual void get_data() = 0;
     
     string get_name()
     {
@@ -49,7 +47,7 @@ public:
     {
         cout << "Assignment Name: " << name << endl;
         cout << "Content: " << content << endl;
-        // cout << "Assignment Status: " << status << endl;
+        
     }
     void assignRemark(string s)
     {
@@ -99,42 +97,21 @@ public:
         this->enroll_no = enroll_no;
         this->password = password;
     }
-    void addProfile()
-    {
-        string name;
-        string enroll_no;
-        string password;
-
-        // cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "Name: ";
-        cin >> name;
-        this->name = name;
-        // cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        cout << "Enrollment Number: ";
-        cin >> enroll_no;
-        this->enroll_no = enroll_no;
-
-        cout << "Enter Password: ";
-        cin >> password;
-        this->password = password;
-
-        assignments = tot_assignments;
-    }
+    
     void displayProfile()
     {
         cout << "Name: " << name << endl;
         cout << "Enrollment No.: " << enroll_no << endl;
         cout << "Total assignments: " << assignments.size() << endl;
-        int ctr = 0;
-        for (auto it : assignments)
+        int pd = 0;
+        for (auto i : assignments)
         {
-            if (it.get_status() == "Pending")
+            if (i.get_status() == "Pending")
             {
-                ctr++;
+                pd++;
             }
         }
-        cout << "Pending assignments: " << ctr << endl;
+        cout << "Pending assignments: " << pd << endl;
     }
     
     string get_pass()
@@ -168,7 +145,7 @@ public:
             }
         }
     }
-    // Method to get pending assignments
+    
     void getPendingAssignments() const
     {
         cout << "Pending assignments for student " << name << ":" << endl;
@@ -184,7 +161,8 @@ public:
     }
 };
 map<string, Student> studentProfile;
-// Class representing a Reviewer, inheriting from IMG_Member
+
+
 class Reviewer : public IMG_Member
 {
 private:
@@ -198,26 +176,7 @@ public:
         this->enroll_no = enroll_no;
         this->password = password;
     }
-    void addProfile()
-    {
-        string name;
-        string enroll_no;
-        string password;
-
-        
-        cout << "Name: ";
-        cin >> name;
-        this->name = name;
-        
-
-        cout << "Enrollment Number: ";
-        cin >> enroll_no;
-        this->enroll_no = enroll_no;
-
-        cout << "Enter Password: ";
-        cin >> password;
-        this->password = password;
-    }
+    
     void displayProfile()
     {
         cout << "Reviewer Profile:" << endl;
@@ -244,7 +203,7 @@ public:
         tot_assignments.push_back(Assignment(name, content ,remark,"Pending",false));
     }
 
-    // Method to suggest iteration
+    
     void suggestIteration(string enroll_no, string name, string remark)
     {
         for (auto i : studentProfile)
@@ -375,7 +334,7 @@ void review() {
                         if (password == studentProfile[enroll_no].get_pass()) {
                             cout << "     ******      *******      ******      " << endl;
                             cout << "Welcome " << studentProfile[enroll_no].get_name() << endl;
-                            cout << "What do you want to do ?" << endl;
+                            cout << "Choose an option" << endl;
                             cout << "1. Get your profile" << endl;
                             cout << "2. Work on Assignments" << endl;
                             cout << "3. Go Back" << endl;
@@ -398,7 +357,7 @@ void review() {
                                 
                                 while (true) {
                                     cout << "     ******      *******      ******      " << endl;
-                                    cout << "What do you want to do ?" << endl;
+                                    cout << "Choose an option" << endl;
                                     cout << "1. Send assignment for iteration" << endl;
                                     cout << "2. View remark" << endl;
                                     cout << "3. Go Back" << endl;
@@ -451,7 +410,7 @@ void review() {
                         if (password == ReviewerProfile[enroll_no].get_pass()) {
                             cout << "     ******      *******      ******      " << endl;
                             cout << "Welcome " << ReviewerProfile[enroll_no].get_name() << endl;
-                            cout << "What do you want to do ?" << endl;
+                            cout << "Choose an option" << endl;
                             cout << "1. Get your profile" << endl;
                             cout << "2. See Assignments" << endl;
                             cout << "3. Upload Assignment" << endl;
@@ -471,7 +430,7 @@ void review() {
                                 
                                 while (true) {
                                     cout << "     ******      *******      ******      " << endl;
-                                    cout << "What do you want to do ?" << endl;
+                                    cout << "Choose an option" << endl;
                                     cout << "1. Review Assignment" << endl;
                                     cout << "2. Go Back" << endl;
                                     cout << "3. Exit" << endl;
@@ -500,11 +459,13 @@ void review() {
                                             cout << "Enter Enrollment no. of student to iterate" << endl;
                                             cin >> enroll_no;
                                             cout << "     ******      *******      ******      " << endl;
+                                            cout << "Choose an option" << endl;
                                             cout << "1. Mark as Complete" << endl;
                                             cout << "2. Give remark" << endl;
                                             cout << "3. Go Back" << endl;
                                             cout << "4. Exit" << endl;
                                             cout << "Enter 1/2/3/4" << endl;
+                                            cout << "     ******      *******      ******      " << endl;
                                             int r7;
                                             cin >> r7;
                                             
