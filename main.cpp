@@ -204,12 +204,11 @@ public:
         string enroll_no;
         string password;
 
-        // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        
         cout << "Name: ";
         cin >> name;
         this->name = name;
-        // cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
+        
 
         cout << "Enrollment Number: ";
         cin >> enroll_no;
@@ -595,7 +594,7 @@ void review() {
 void store()
 {
     ofstream fout;
-    fout.open("student_database.txt");
+    fout.open("members/student_database.txt");
     for (auto it : studentProfile)
     {
         Student s = it.second;
@@ -618,7 +617,7 @@ void store()
     fout.close();
 
     ofstream fout2;
-    fout2.open("reviewer_database.txt");
+    fout2.open("members/reviewer_database.txt");
     for (auto it : ReviewerProfile)
     {
         Reviewer r = it.second;
@@ -630,7 +629,7 @@ void store()
     fout2.close();
 
     ofstream fout3;
-    fout3.open("tot_assignment.txt");
+    fout3.open("members/tot_assignment.txt");
     for (auto it : tot_assignments)
     {
         Assignment assig = it;
@@ -642,7 +641,7 @@ void store()
 
 
 void loadStudents() {
-    ifstream fin("Student_database.txt");
+    ifstream fin("members/student_database.txt");
     string line;
     while (getline(fin, line)) {
         stringstream ss(line);
@@ -684,7 +683,7 @@ void loadStudents() {
 }
 
 void loadReviewers() {
-    ifstream fin2("Reviewer_database.txt");
+    ifstream fin2("members/reviewer_database.txt");
     string line2;
     while (getline(fin2, line2)) {
         stringstream ss(line2);
@@ -701,7 +700,7 @@ void loadReviewers() {
 }
 
 void loadAssignments() {
-    ifstream fin3("tot_assignment.txt");
+    ifstream fin3("members/tot_assignment.txt");
     if (fin3.is_open()) {
         string line3;
         while (getline(fin3, line3)) {
