@@ -327,9 +327,9 @@ void review() {
                 if (r2 == 1) {
 
                     while (true) {
-                        cout << "Enrollment Number: "<<endl;
+                        cout << "Enrollment Number: ";
                         cin >> enroll_no;
-                        cout << "Enter Password: "<<endl;
+                        cout << "Enter Password: ";
                         cin >> password;
                         if (password == studentProfile[enroll_no].get_pass()) {
                             cout << "     ******      *******      ******      " << endl;
@@ -403,9 +403,9 @@ void review() {
                 }
                 else if (r2 == 2) {
                     while (true) {
-                        cout << "Enrollment Number: "<<endl;;
+                        cout << "Enrollment Number: ";
                         cin >> enroll_no;
-                        cout << "Enter Password: "<<endl;
+                        cout << "Enter Password: ";
                         cin >> password;
                         if (password == ReviewerProfile[enroll_no].get_pass()) {
                             cout << "     ******      *******      ******      " << endl;
@@ -694,12 +694,6 @@ void load() {
 
 int main()
 {
-    #ifndef ONLINE_JUDGE
-    clock_t T = clock();
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-#endif
-    ios_base::sync_with_stdio(false), cout.tie(NULL), cin.tie(NULL);
 load();
 review();
 store();
