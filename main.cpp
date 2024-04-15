@@ -198,7 +198,8 @@ public:
         return password;
     }
 
-    void uploadAssignment(string name, string content,vector<string>&remark)
+    void uploadAssignment(string name, string content,vector<string>remark)1
+    
     {
         tot_assignments.push_back(Assignment(name, content ,remark,"Pending",false));
     }
@@ -325,13 +326,14 @@ void review() {
                 vector<string>v;
                 
                 if (r2 == 1) {
-
+                    cout << "Enrollment Number: ";
+                    cin >> enroll_no;
+                    cout << "Enter Password: ";
+                    cin >> password;
                     while (true) {
-                        cout << "Enrollment Number: ";
-                        cin >> enroll_no;
-                        cout << "Enter Password: ";
-                        cin >> password;
+                        
                         if (password == studentProfile[enroll_no].get_pass()) {
+                            
                             cout << "     ******      *******      ******      " << endl;
                             cout << "Welcome " << studentProfile[enroll_no].get_name() << endl;
                             cout << "Choose an option" << endl;
@@ -397,16 +399,18 @@ void review() {
                             cout << "     ******      *******      ******      " << endl;
                             cout << "INVALID ENROLLNO OR PASSWORD" << endl;
                             cout << "     ******      *******      ******      " << endl;
-                            return;
+                            break;
                         }
                     }
                 }
                 else if (r2 == 2) {
-                    while (true) {
-                        cout << "Enrollment Number: ";
-                        cin >> enroll_no;
+                    string enrl,pass;
+                    cout << "Enrollment Number: ";
+                        cin >> enrl;
                         cout << "Enter Password: ";
-                        cin >> password;
+                        cin >> pass;
+                    while (true) {
+                        
                         if (password == ReviewerProfile[enroll_no].get_pass()) {
                             cout << "     ******      *******      ******      " << endl;
                             cout << "Welcome " << ReviewerProfile[enroll_no].get_name() << endl;
@@ -503,11 +507,11 @@ void review() {
                             }
                              else if (r3 == 3) {
                                 cout << "     ******      *******      ******      " << endl;
-                                cout << "Enter Assignment Name" << endl;
+                                cout << "Enter Assignment Name" ;
                                 cin >> name;
-                                cout << "Enter Assignment Content" << endl;
+                                cout << "Enter Assignment Content" ;
                                 cin >> content;
-                                ReviewerProfile[enroll_no].uploadAssignment(name, content,v);
+                                ReviewerProfile[enroll_no].uploadAssignment(name, content, v);
                                 cout << "     ******      *******      ******      " << endl;
                             } else if (r3 == 4) {
                                break;
@@ -515,10 +519,11 @@ void review() {
                                 return;
                             }
                         }
-                         else {
+                    else {
                             cout << "     ******      *******      ******      " << endl;
                             cout << "INVALID ENROLLNO OR PASSWORD" << endl;
                             cout << "     ******      *******      ******      " << endl;
+                            break;
                         }
                     }
                 } else if (r2 == 3) {
@@ -699,4 +704,3 @@ review();
 store();
     return 0;
 }
-
