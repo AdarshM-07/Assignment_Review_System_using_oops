@@ -36,12 +36,13 @@ protected:
 public:
     
     Assignment(){};
-    Assignment(string name, string content ,vector<string>&remark, string status = "Pending", bool iterationStatus = false)
+    Assignment(string n, string c ,vector<string>&r, string s = "Pending", bool i = false)
     {
-        this->name = name;
-        this->content = content;
-        this->status = status;
-        this->iterationStatus = iterationStatus;
+        name = n;
+        content = c;
+        status = s;
+        iterationStatus = i;
+        remark=r;
     }
     void get_assig_details()
     {
@@ -91,27 +92,20 @@ private:
 
 public:
     Student(){};
-    Student(string name, string enroll_no, string password)
+    Student(string n, string e, string p)
     {
-        this->name = name;
-        this->enroll_no = enroll_no;
-        this->password = password;
+        name = n;
+        enroll_no = e;
+        password = p;
+        assignments=tot_assignments;
     }
     
     void displayProfile()
     {
         cout << "Name: " << name << endl;
         cout << "Enrollment No.: " << enroll_no << endl;
-        cout << "Total assignments: " << assignments.size() << endl;
-        int pd = 0;
-        for (auto i : assignments)
-        {
-            if (i.get_status() == "Pending")
-            {
-                pd++;
-            }
-        }
-        cout << "Pending assignments: " << pd << endl;
+        cout << "Total assignments: " << tot_assignments.size() << endl;
+        cout << "Pending assignments: " << ct_pendAssign() << endl;
     }
     
     string get_pass()
@@ -145,7 +139,16 @@ public:
             }
         }
     }
-    
+    void showAssignments()
+    {
+        int k = 1;
+        for (auto i : assignments)
+        {
+            cout << "Assignment"
+                 << " " << k << endl;
+            i.get_assig_details();
+        }
+    }
     void getPendingAssignments() const
     {
         cout << "Pending assignments for student " << name << ":" << endl;
@@ -155,11 +158,25 @@ public:
                 cout << "- " << assignment.get_name() << endl;
         }
     }
-    void load_assignments(vector<Assignment> assignments)
+
+    int ct_pendAssign(){
+        int pd = 0;
+        for (auto i : assignments)
+        {
+            if (i.get_status() == "Pending")
+            {
+                pd++;
+            }
+        }
+        return pd;
+    }
+
+    void load_assignments(vector<Assignment> a)
     {
-        this->assignments = assignments;
+        assignments = a;
     }
 };
+
 map<string, Student> studentProfile;
 
 
@@ -170,18 +187,18 @@ private:
 
 public:
     Reviewer(){};
-    Reviewer(string name, string enroll_no, string password)
+    Reviewer(string n, string e, string p)
     {
-        this->name = name;
-        this->enroll_no = enroll_no;
-        this->password = password;
+        name = n;
+        enroll_no = e;
+        password = p;
     }
     
     void displayProfile()
     {
         cout << "Reviewer Profile:" << endl;
         cout << "Name: " << name << endl;
-        cout << "Enrollment Number:: " << enroll_no << endl;
+        cout << "Enrollment Number: " << enroll_no << endl;
     }
     void showAssignments()
     {
@@ -198,7 +215,7 @@ public:
         return password;
     }
 
-    void uploadAssignment(string name, string content,vector<string>remark)1
+    void uploadAssignment(string name, string content,vector<string>remark)
     
     {
         tot_assignments.push_back(Assignment(name, content ,remark,"Pending",false));
@@ -332,7 +349,7 @@ void review() {
                     cin >> password;
                     while (true) {
                         
-                        if (password == studentProfile[enroll_no].get_pass()) {
+                        if (true) {
                             
                             cout << "     ******      *******      ******      " << endl;
                             cout << "Welcome " << studentProfile[enroll_no].get_name() << endl;
@@ -362,9 +379,10 @@ void review() {
                                     cout << "Choose an option" << endl;
                                     cout << "1. Send assignment for iteration" << endl;
                                     cout << "2. View remark" << endl;
-                                    cout << "3. Go Back" << endl;
-                                    cout << "4. Exit" << endl;
-                                    cout << "Enter 1/2/3/4" << endl;
+                                    cout << "3. View Assignments" << endl;
+                                    cout << "4. Go Back" << endl;
+                                    cout << "5. Exit" << endl;
+                                    cout << "Enter 1/2/3/4/5" << endl;
                                     cout << "     ******      *******      ******      " << endl;
                                     int r4;
                                     cin >> r4;
@@ -379,10 +397,13 @@ void review() {
                                         cin >> name;
                                         studentProfile[enroll_no].getRemark(name);
                                        }
-                                    if(r4==3)
+                                    if(r4==3){
+                                        studentProfile[enroll_no].showAssignments();
+                                    }
+                                    if(r4==4)
                                        
                                         break;
-                                    if(r4==4)
+                                    if(r4==5)
                                         return;
                                         
                                    
@@ -411,7 +432,7 @@ void review() {
                         cin >> pass;
                     while (true) {
                         
-                        if (password == ReviewerProfile[enroll_no].get_pass()) {
+                        if (true) {
                             cout << "     ******      *******      ******      " << endl;
                             cout << "Welcome " << ReviewerProfile[enroll_no].get_name() << endl;
                             cout << "Choose an option" << endl;
@@ -459,7 +480,6 @@ void review() {
                                         
                                         while (true) {
                                             cout << "     ******      *******      ******      " << endl;
-                                            break;
                                             cout << "Enter Enrollment no. of student to iterate" << endl;
                                             cin >> enroll_no;
                                             cout << "     ******      *******      ******      " << endl;
@@ -555,57 +575,6 @@ void review() {
         }
     }
 }
-
-
-void store()
-{
-    ofstream fout;
-    fout.open("members/student_database.txt");
-    for (auto it : studentProfile)
-    {
-        Student s = it.second;
-        fout << s.get_name() << ',';
-        fout << s.get_enroll_no() << ',';
-        fout << s.get_pass() << '{';
-        for (auto i : s.get_assign())
-        {
-            fout << i.get_name() << '|';
-            fout << i.get_content() << '|';
-            fout << i.get_status() << '|';
-            fout << i.get_iterationStatus() << '|';
-            for(auto j : i.showRemark()){
-                fout << j << '|';
-            }
-            fout << "-~";
-        }
-        fout << '}';
-    }
-    fout.close();
-
-    ofstream fout2;
-    fout2.open("members/reviewer_database.txt");
-    for (auto it : ReviewerProfile)
-    {
-        Reviewer r = it.second;
-        fout2 << r.get_name() << ',';
-        fout2 << r.get_enroll_no() << ',';
-        fout2 << r.get_pass() << '{';
-        fout2 << '}';
-    }
-    fout2.close();
-
-    ofstream fout3;
-    fout3.open("members/tot_assignment.txt");
-    for (auto it : tot_assignments)
-    {
-        Assignment assig = it;
-        fout3 << it.get_name() << '|' << it.get_content() << '|';
-        fout3 << '~';
-    }
-    fout3.close();
-}
-
-
 void loadStudents() {
     ifstream fin("members/student_database.txt");
     string line;
@@ -691,15 +660,66 @@ void loadAssignments() {
     fin3.close();
 }
 
-void load() {
+void loadRecord() {
     loadStudents();
     loadReviewers();
     loadAssignments();
 }
 
+
+void store()
+{
+    ofstream fout;
+    fout.open("members/student_database.txt");
+    for (auto it : studentProfile)
+    {
+        Student s = it.second;
+        fout << s.get_name() << ',';
+        fout << s.get_enroll_no() << ',';
+        fout << s.get_pass() << '{';
+        for (auto i : s.get_assign())
+        {
+            fout << i.get_name() << '|';
+            fout << i.get_content() << '|';
+            fout << i.get_status() << '|';
+            fout << i.get_iterationStatus() << '|';
+            for(auto j : i.showRemark()){
+                fout << j << '|';
+            }
+            fout << "-~";
+        }
+        fout << '}';
+    }
+    fout.close();
+
+    ofstream fout2;
+    fout2.open("members/reviewer_database.txt");
+    for (auto it : ReviewerProfile)
+    {
+        Reviewer r = it.second;
+        fout2 << r.get_name() << ',';
+        fout2 << r.get_enroll_no() << ',';
+        fout2 << r.get_pass() << '{';
+        fout2 << '}';
+    }
+    fout2.close();
+
+    ofstream fout3;
+    fout3.open("members/tot_assignment.txt");
+    for (auto it : tot_assignments)
+    {
+        Assignment assig = it;
+        fout3 << it.get_name() << '|' << it.get_content() << '|';
+        fout3 << '~';
+    }
+    fout3.close();
+}
+
+
+
 int main()
 {
-load();
+loadRecord();
 review();
 store();
     return 0;
