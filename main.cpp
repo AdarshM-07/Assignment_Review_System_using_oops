@@ -23,6 +23,10 @@ public:
     {
         return enroll_no;
     }
+    void displayProfile(){
+        cout << "Name: " << name << endl;
+        cout << "Enrollment No.: " << enroll_no << endl;
+    }
     IMG_Member(){};
 };
 
