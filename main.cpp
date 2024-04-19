@@ -35,7 +35,7 @@ protected:
 
 public:
     
-    Assignment(){};
+    
     Assignment(string n, string c ,vector<string>&r, string s = "Pending", bool i = false)
     {
         name = n;
@@ -89,9 +89,9 @@ class Student : public IMG_Member
 private:
     string password;
     vector<Assignment> assignments;
-
+    static map<string, Student> studentProfile;
 public:
-    Student(){};
+    Student() {};
     Student(string n, string e, string p)
     {
         name = n;
@@ -104,7 +104,7 @@ public:
     {
         cout << "Name: " << name << endl;
         cout << "Enrollment No.: " << enroll_no << endl;
-        cout << "Total assignments: " << tot_assignments.size() << endl;
+        cout << "Total assignments: " << assignments.size() << endl;
         cout << "Pending assignments: " << ct_pendAssign() << endl;
     }
     
@@ -116,17 +116,26 @@ public:
     {
         return assignments;
     }
-    void req_iterate(string name)
+    void req_iterate(string name,map<string, Student>& studentProfile)
     {
         for (auto i : assignments)
         {
             if (i.get_name() == name)
             {
                 i.update_status("Pending", true);
+
             }
         }
+         for (auto& pair : studentProfile)
+    {
+        if (pair.second.get_enroll_no() == enroll_no)
+        {
+            pair.second = *this; // Update the Student object
+            break;
+        }
     }
-    void getRemark(string name)
+    }
+    void getRemark(string name,map<string, Student>& studentProfile)
     {
         for (auto i : assignments)
         {
@@ -138,6 +147,14 @@ public:
                 }
             }
         }
+         for (auto& pair : studentProfile)
+    {
+        if (pair.second.get_enroll_no() == enroll_no)
+        {
+            pair.second = *this; // Update the Student object
+            break;
+        }
+    }
     }
     void showAssignments()
     {
@@ -147,6 +164,7 @@ public:
             cout << "Assignment"
                  << " " << k << endl;
             i.get_assig_details();
+            k++;
         }
     }
     void getPendingAssignments() const
@@ -170,7 +188,11 @@ public:
         }
         return pd;
     }
-
+    void addAssgn(string n,string c){
+        vector<string> v;
+        Assignment a(n,c,v,"Pending",false);
+        assignments.push_back(a);
+    }
     void load_assignments(vector<Assignment> a)
     {
         assignments = a;
@@ -186,7 +208,7 @@ private:
     string password;
 
 public:
-    Reviewer(){};
+    Reviewer() {};
     Reviewer(string n, string e, string p)
     {
         name = n;
@@ -208,6 +230,7 @@ public:
             cout << "Assignment"
                  << " " << k << endl;
             i.get_assig_details();
+            k++;
         }
     }
     string get_pass()
@@ -218,7 +241,8 @@ public:
     void uploadAssignment(string name, string content,vector<string>remark)
     
     {
-        tot_assignments.push_back(Assignment(name, content ,remark,"Pending",false));
+        Assignment a(name, content ,remark,"Pending",false);
+        tot_assignments.push_back(a);
     }
 
     
@@ -228,7 +252,8 @@ public:
         {
             if (i.first == enroll_no)
             {
-                for (auto j : i.second.get_assign())
+                vector<Assignment> a2;a2=i.second.get_assign();
+                for (auto j : a2)
                 {
                     if (j.get_name() == name)
                     {
@@ -236,6 +261,7 @@ public:
                         j.update_status("Pending", false);
                     }
                 }
+                i.second.load_assignments(a2);
             }
         }
     }
@@ -243,15 +269,18 @@ public:
     {
         for (auto i : studentProfile)
         {
+            
             if (i.first == enroll_no)
             {
-                for (auto j : i.second.get_assign())
+                vector<Assignment> a2;a2=i.second.get_assign();
+                for (auto j : a2)
                 {
                     if (j.get_name() == name)
                     {
                         j.update_status("Completed", false);
                     }
                 }
+                 i.second.load_assignments(a2);
             }
         }
     }
@@ -266,13 +295,13 @@ void loginNewStu()
     string enroll_no;
     string password;
 
-    cout << "Name: "<<endl;
+    cout << "Name: ";
     cin >> name;
 
-    cout << "Enrollment Number: "<<endl;
+    cout << "Enrollment Number: ";
     cin >> enroll_no;
 
-    cout << "Enter Password: "<<endl;
+    cout << "Enter Password: ";
     cin >> password;
     Student s(name, enroll_no, password);
     studentProfile[enroll_no] = s;
@@ -283,13 +312,13 @@ void loginNewRev()
     string enroll_no;
     string password;
 
-    cout << "Name: "<<endl;
+    cout << "Name: ";
     cin >> name;
 
-    cout << "Enrollment Number: "<<endl;
+    cout << "Enrollment Number: ";
     cin >> enroll_no;
 
-    cout << "Enter Password: "<<endl;
+    cout << "Enter Password: ";
     cin >> password;
     Reviewer r(name, enroll_no, password);
     ReviewerProfile[enroll_no] = r;
@@ -340,7 +369,7 @@ void review() {
                 string name;
                 string content;
                 string remark;
-                vector<string>v;
+                
                 
                 if (r2 == 1) {
                     cout << "Enrollment Number: ";
@@ -349,7 +378,7 @@ void review() {
                     cin >> password;
                     while (true) {
                         
-                        if (true) {
+                        if (studentProfile[enroll_no].get_pass()==password) {
                             
                             cout << "     ******      *******      ******      " << endl;
                             cout << "Welcome " << studentProfile[enroll_no].get_name() << endl;
@@ -390,12 +419,13 @@ void review() {
                                     if(r4==1){
                                         cout << "Enter Assignment name" << endl;
                                         cin >> name;
-                                        studentProfile[enroll_no].req_iterate(name);
+                                        
+                                        studentProfile[enroll_no].req_iterate(name,studentProfile);
                                        }
                                     if(r4==2){
                                         cout << "Enter Assignment name" << endl;
                                         cin >> name;
-                                        studentProfile[enroll_no].getRemark(name);
+                                        studentProfile[enroll_no].getRemark(name,studentProfile);
                                        }
                                     if(r4==3){
                                         studentProfile[enroll_no].showAssignments();
@@ -432,9 +462,9 @@ void review() {
                         cin >> pass;
                     while (true) {
                         
-                        if (true) {
+                        if (ReviewerProfile[enrl].get_pass()==pass) {
                             cout << "     ******      *******      ******      " << endl;
-                            cout << "Welcome " << ReviewerProfile[enroll_no].get_name() << endl;
+                            cout << "Welcome " << ReviewerProfile[enrl].get_name() << endl;
                             cout << "Choose an option" << endl;
                             cout << "1. Get your profile" << endl;
                             cout << "2. See Assignments" << endl;
@@ -446,11 +476,11 @@ void review() {
                             int r3;
                             cin >> r3;
                             if (r3 == 1) {
-                                ReviewerProfile[enroll_no].displayProfile();
+                                ReviewerProfile[enrl].displayProfile();
                             } 
                             else if (r3 == 2) {
                                 cout << "     ******      *******      ******      " << endl;
-                                ReviewerProfile[enroll_no].showAssignments();
+                                ReviewerProfile[enrl].showAssignments();
                                 cout << "     ******      *******      ******      " << endl;
                                 
                                 while (true) {
@@ -470,9 +500,11 @@ void review() {
                                         cin >> name;
                                         cout << "     ******      *******      ******      " << endl;
                                         cout << "This is the list of students with iteration request" << endl;
+                                        cout<<"Name"<<"\t"<<"EnrollmentNo"<<endl;
                                         for (auto i : studentProfile) {
                                             for (auto j : i.second.get_assign()) {
                                                 if (j.get_name() == name && j.get_iterationStatus()) {
+                                                    
                                                     cout << i.second.get_name() << "\t" << i.second.get_enroll_no() << endl;
                                                 }
                                             }
@@ -481,7 +513,8 @@ void review() {
                                         while (true) {
                                             cout << "     ******      *******      ******      " << endl;
                                             cout << "Enter Enrollment no. of student to iterate" << endl;
-                                            cin >> enroll_no;
+                                            string enrl1;
+                                            cin >> enrl1;
                                             cout << "     ******      *******      ******      " << endl;
                                             cout << "Choose an option" << endl;
                                             cout << "1. Mark as Complete" << endl;
@@ -494,12 +527,12 @@ void review() {
                                             cin >> r7;
                                             
                                             if(r7==1) 
-                                                ReviewerProfile[enroll_no].markCompleted(enroll_no, name);
+                                                ReviewerProfile[enrl1].markCompleted(enrl1, name);
                                                 
                                             if(r7==2) {
                                                 cout << "Enter remark" << endl;
                                                 cin >> remark;
-                                                ReviewerProfile[enroll_no].suggestIteration(enroll_no, name, remark);
+                                                ReviewerProfile[enrl1].suggestIteration(enrl1, name, remark);
                                                 }
                                             if(r7==3) 
                                                 break;
@@ -527,11 +560,17 @@ void review() {
                             }
                              else if (r3 == 3) {
                                 cout << "     ******      *******      ******      " << endl;
-                                cout << "Enter Assignment Name" ;
+                                cout << "Enter Assignment Name: " ;
                                 cin >> name;
-                                cout << "Enter Assignment Content" ;
+                                cout << "Enter Assignment Content: " ;
                                 cin >> content;
+                                vector<string>v;
                                 ReviewerProfile[enroll_no].uploadAssignment(name, content, v);
+                                for (auto i : studentProfile)
+                            {
+                                i.second.addAssgn(name, content);
+                                studentProfile[i.first] = i.second;
+                            }
                                 cout << "     ******      *******      ******      " << endl;
                             } else if (r3 == 4) {
                                break;
