@@ -535,7 +535,7 @@ void review() {
     }
 }
 void loadStudents() {
-    ifstream fin("/Users/mauryadarsh07gmail.com/cp/oops/member/student_database.txt");
+    ifstream fin("/member/student_database.txt");
     string line;
     while (getline(fin, line,'@')) {
         stringstream sts(line);
@@ -577,7 +577,7 @@ void loadStudents() {
 }
 
 void loadReviewers() {
-    ifstream fin2("/Users/mauryadarsh07gmail.com/cp/oops/member/reviewer_database.txt");
+    ifstream fin2("/member/reviewer_database.txt");
     string line2;
     while (getline(fin2, line2,'~')) {
         stringstream sts(line2);
@@ -594,7 +594,7 @@ void loadReviewers() {
 }
 
 void loadAssignments() {
-    ifstream fin3("/Users/mauryadarsh07gmail.com/cp/oops/member/tot_assignment.txt");
+    ifstream fin3("/member/tot_assignment.txt");
     if (fin3.is_open()) {
         string line3;
         while (getline(fin3, line3,'~')) {
@@ -629,7 +629,7 @@ void loadRecord() {
 void store()
 {
     ofstream fout;
-    fout.open("/Users/mauryadarsh07gmail.com/cp/oops/member/student_database.txt");
+    fout.open("/member/student_database.txt");
     for (auto it : studentProfile)
     {
         Student s = it.second;
@@ -655,7 +655,7 @@ void store()
     fout.close();
 
     ofstream fout2;
-    fout2.open("/Users/mauryadarsh07gmail.com/cp/oops/member/reviewer_database.txt");
+    fout2.open("/member/reviewer_database.txt");
     for (auto it : ReviewerProfile)
     {
         Reviewer r = it.second;
@@ -668,7 +668,7 @@ void store()
     fout2.close();
 
     ofstream fout3;
-    fout3.open("/Users/mauryadarsh07gmail.com/cp/oops/member/tot_assignment.txt");
+    fout3.open("/member/tot_assignment.txt");
     if(tot_assignments.size()){
     for (auto it : tot_assignments)
     {
